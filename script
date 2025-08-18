@@ -1,102 +1,47 @@
 #Step 1: Install Ansible on EC2 Linux 2023
-#Amazon Linux 2023 does not ship Ansible in dnf, so we install it via pip3.
 
-# Update packages
+#Update system packages
 sudo dnf update -y
 
-# Install Python + pip
-sudo dnf install -y python3 python3-pip
-
-# Install Ansible
-pip3 install --user ansible
-
-# Add Ansible to PATH
-echo 'export PATH=$PATH:/home/ec2-user/.local/bin' >> ~/.bashrc
-source ~/.bashrc
-
+#Install Ansible
+#Amazon Linux 2023 uses dnf and provides Ansible from the Amazon Linux Extras repos.
+sudo dnf install ansible-core -y
 
 #Verify:
 ansible --version
 
-#Step 2: Create Default Ansible Config /etc/ansible/ansible.cfg
+#You should see something like:
+#ansible [core 2.14.x] 
+
+#Create Ansible config directory
 sudo mkdir -p /etc/ansible
-sudo nano /etc/ansible/ansible.cfg
+sudo touch /etc/ansible/ansible.cfg
+sudo touch /etc/ansible/hosts
 
+#Minimal ansible.cfg (default setup)
+Edit /etc/ansible/ansible.cfg:
 
-#Paste this default config (clean & usable for EC2):
-
+#paste this lines
 [defaults]
-# Global inventory file
 inventory = /etc/ansible/hosts
-
-# Default remote user for EC2 Amazon Linux
 remote_user = ec2-user
-
-# Disable host key checking
 host_key_checking = False
-
-# Disable retry files
 retry_files_enabled = False
 
-# Show task execution output clearly
-stdout_callback = yaml
-bin_ansible_callbacks = True
+#Add Inventory (example with EC2)
 
-# Enable privilege escalation (sudo by default)
-become = True
-become_method = sudo
-become_user = root
-
-# Collections & roles paths
-collections_paths = /etc/ansible/collections
-roles_path = /etc/ansible/roles
-
-# Parallelism
-forks = 10
-
-[privilege_escalation]
-become = True
-become_method = sudo
-become_user = root
-become_ask_pass = False
-
-[ssh_connection]
-# Speed up SSH
-pipelining = True
-ssh_args = -o ControlMaster=auto -o ControlPersist=60s
-
-
-Save and exit.
-
-🟢 Step 3: Create Default Inventory /etc/ansible/hosts
-sudo nano /etc/ansible/hosts
-
-
-Example for 1 EC2 instance:
+Edit /etc/ansible/hosts:
 
 [webservers]
-ec2-xx-xx-xx-xx.compute.amazonaws.com ansible_user=ec2-user ansible_ssh_private_key_file=/path/to/key.pem
+ec2-xx-xx-xx-xx.compute-1.amazonaws.com ansible_user=ec2-user ansible_ssh_private_key_file=/path/to/key.pem
 
-🟢 Step 4: Test Setup
+6. Test Connection
 ansible all -m ping
 
 
-Expected:
+If SSH is set up correctly, you’ll get:
 
-ec2-xx-xx-xx-xx.compute.amazonaws.com | SUCCESS => {
+ec2-xx-xx-xx-xx.compute-1.amazonaws.com | SUCCESS => {
     "changed": false,
     "ping": "pong"
 }
-
-
-✅ At this point:
-
-Ansible is installed system-wide.
-
-/etc/ansible/ansible.cfg exists with defaults.
-
-/etc/ansible/hosts contains your EC2 inventory.
-
-You can run playbooks without specifying inventory or user every time.
-
-👉 Do you also want me to add a ready-to-use playbook (like install_nginx.yml) under /etc/ansible/ so you can immediately test automation on your EC2?
