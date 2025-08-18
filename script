@@ -18,8 +18,13 @@ sudo mkdir -p /etc/ansible
 sudo touch /etc/ansible/ansible.cfg
 sudo touch /etc/ansible/hosts
 
+#Set vim as default editor 
+#Make it permanent (recommended)
+export EDITOR=vim
+source ~/.bashrc
+
 #Minimal ansible.cfg (default setup)
-Edit /etc/ansible/ansible.cfg:
+vim /etc/ansible/ansible.cfg
 
 #paste this lines
 [defaults]
@@ -29,17 +34,15 @@ host_key_checking = False
 retry_files_enabled = False
 
 #Add Inventory (example with EC2)
-
-Edit /etc/ansible/hosts:
+vim /etc/ansible/hosts
 
 [webservers]
 ec2-xx-xx-xx-xx.compute-1.amazonaws.com ansible_user=ec2-user ansible_ssh_private_key_file=/path/to/key.pem
 
-6. Test Connection
+#Test Connection
 ansible all -m ping
 
-
-If SSH is set up correctly, you’ll get:
+#If SSH is set up correctly, you’ll get:
 
 ec2-xx-xx-xx-xx.compute-1.amazonaws.com | SUCCESS => {
     "changed": false,
