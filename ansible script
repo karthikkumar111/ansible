@@ -1,0 +1,53 @@
+# Update system
+sudo dnf update -y
+
+# Install Ansible
+sudo dnf install ansible-core -y
+
+# Verify installation
+ansible --version
+
+# Create ansible user
+sudo useradd ansible
+
+# Set password (optional, but SSH key preferred)
+sudo passwd ansible
+
+#change nano to vim editor
+export EDITOR=vim
+#Then reload:
+source ~/.bashrc
+
+# Allow passwordless sudo for ansible
+visudo
+#passte the lines on 101 line
+ansible ALL=(ALL) NOPASSWD:ALL
+
+#changing the configuration
+sudo vim /etc/ssh/sshd_config
+#go to 65line
+PasswordAuthentication yes
+PermitEmptyPasswords no
+
+#restart sshd
+sudo systemctl restart sshd
+
+#switch to ansible user
+su - ansible
+
+#generate key
+ssh-keygen
+
+#ssh key copying to slave instances
+ssh-copy-id ansible@<slaveprivateip>
+
+#switch from ansible user to root user
+exit
+
+vi /etc/ansible/ansible.cfg
+
+
+
+
+
+
