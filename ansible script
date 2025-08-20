@@ -44,6 +44,10 @@ ssh-copy-id ansible@<slaveprivateip>
 #switch from ansible user to root user
 exit
 
+#Create Ansible config directory
+sudo mkdir -p /etc/ansible
+sudo touch /etc/ansible/ansible.cfg
+sudo touch /etc/ansible/hosts
 
 #configure the ansible.cfg
 vi /etc/ansible/ansible.cfg
@@ -55,8 +59,50 @@ remote_user = ec2-user
 host_key_checking = False
 retry_files_enabled = False
 
+vim /etc/ansible/hosts
+#group 1 (dev)
+[webservers]
+<slave private ip address>
+<slave private ip address>
+<slave private ip address>
 
+#group 2 (ops)
+[webservers]
+<slave private ip address>
+<slave private ip address>
 
+#how to check, how many slave servers are connected with ansible(master)
+ansible all --list-hosts
 
+#how to check, only particular group servers are connected with ansible(master)
+ansible <group name> --list-hosts
 
+#how to check, 3rd server out of all servers are connected with ansible(master)
+ansible all(2) --list-hosts
+
+#how to check all servers are connected successfully
+#should be in ansible user (su - ansible) not on root user
+ansible all -m ping
+yes
+
+#BASIC PLAYBOK (written in YAML language on master server)
+#create a YAML file
+vim abc.yml
+
+#all yaml file starts with "---" and ends with "..."
+---
+#TARGET SECTION ( trick : T-HUB CONNECTION)
+ hosts: dev, ops
+ user: ansible
+ become: yes
+ connection: ssh
+
+#TASKS SECTION
+ tasks:
+  - name: i am installing git in slave servers
+    action: dnf name=git state=present
+...
+
+#execute the playbook
+ansible-playbook <filename.yml>
 
