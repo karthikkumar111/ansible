@@ -44,7 +44,10 @@ ssh-copy-id ansible@<slaveprivateip>
 #switch from ansible user to root user
 exit
 
+
+#configure the ansible.cfg
 vi /etc/ansible/ansible.cfg
+
 #paste this lines
 [defaults]
 inventory = /etc/ansible/hosts
