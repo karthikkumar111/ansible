@@ -16,7 +16,6 @@ ansible ALL=(ALL) NOPASSWD:ALL
 sudo vim /etc/ssh/sshd_config
 #go to 65line
 PasswordAuthentication yes
-PermitEmptyPasswords no
 
 
 #restart sshd
