@@ -1,22 +1,11 @@
 # Update system
 sudo dnf update -y
 
-# Install Ansible
-sudo dnf install ansible-core -y
-
-# Verify installation
-ansible --version
-
 # Create ansible user
 sudo useradd ansible
 
 # Set password (optional, but SSH key preferred)
 sudo passwd ansible
-
-#change nano to vim editor
-export EDITOR=vim
-#Then reload:
-source ~/.bashrc
 
 # Allow passwordless sudo for ansible
 visudo
@@ -29,37 +18,33 @@ sudo vim /etc/ssh/sshd_config
 PasswordAuthentication yes
 PermitEmptyPasswords no
 
+
 #restart sshd
 sudo systemctl restart sshd
 
-#switch to ansible user
-su - ansible
 
-#generate key
-ssh-keygen
+# Install Ansible
+sudo dnf install ansible-core -y
 
-#ssh key copying to slave instances
-ssh-copy-id ansible@<slaveprivateip>
-
-#switch from ansible user to root user
-exit
+# Verify installation
+ansible --version
 
 #Create Ansible config directory
 sudo mkdir -p /etc/ansible
 sudo touch /etc/ansible/ansible.cfg
 sudo touch /etc/ansible/hosts
 
-#configure the ansible.cfg
-vi /etc/ansible/ansible.cfg
 
+#configure the ansible.cfg
+sudo vi /etc/ansible/ansible.cfg
 #paste this lines
 [defaults]
 inventory = /etc/ansible/hosts
-remote_user = ec2-user
+remote_user = ansible
 host_key_checking = False
 retry_files_enabled = False
 
-vim /etc/ansible/hosts
+sudo vim /etc/ansible/hosts
 #group 1 (dev)
 [webservers]
 <slave private ip address>
@@ -70,6 +55,30 @@ vim /etc/ansible/hosts
 [webservers]
 <slave private ip address>
 <slave private ip address>
+
+#switch to ansible user
+su - ansible
+
+#generate key
+ssh-keygen
+
+#ssh key copying to slave instances
+ssh-copy-id ansible@<slaveprivateip>
+
+
+
+
+
+#change nano to vim editor
+#export EDITOR=vim
+#Then reload:
+#source ~/.bashrc
+
+#switch from ansible user to root user
+#exit
+
+
+
 
 #how to check, how many slave servers are connected with ansible(master)
 ansible all --list-hosts
