@@ -98,30 +98,6 @@ yes
 vim abc.yml
 
 #all yaml file starts with "---" and ends with "..."
----
-#TARGET SECTION ( trick : T-HUB CONNECTION)
- -hosts: dev, ops
-  user: ansible
-  become: yes
-  connection: ssh
-
-#TASKS SECTION
- tasks:
-  - name: i am installing git in slave servers
-    action: dnf name=git state=present
-...
-
-
-
-
-
-
-
-
-
-
-
-
 
 ---
 #TARGET SECTION ( trick : T-HUB CONNECTION)
@@ -137,17 +113,6 @@ vim abc.yml
         name: git
         state: present
 ...
-
-
-
-
-
-
-
-
-
-
-
 
 #execute the playbook
 ansible-playbook <filename.yml>
