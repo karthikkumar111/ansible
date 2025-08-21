@@ -109,9 +109,7 @@ vim abc.yml
   #TASKS SECTION
   tasks:
     - name: I am installing git in slave servers
-      dnf:
-        name: git
-        state: present
+      action: dnf name=git state:present
 ...
 
 #execute the playbook
