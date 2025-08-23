@@ -2,7 +2,6 @@
 # ===============================
 # Simple Ansible Setup Script
 # ===============================
-sudo -i
 # Update system
 sudo dnf update -y
 
