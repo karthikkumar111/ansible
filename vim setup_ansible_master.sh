@@ -25,6 +25,7 @@ ansible --version
 
 # Create Ansible config directory and files
 sudo mkdir -p /etc/ansible
+sudo touch /etc/ansible/ansible.cfg
 sudo touch /etc/ansible/hosts
 
 # Configure ansible.cfg
