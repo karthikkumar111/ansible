@@ -115,3 +115,9 @@ vim abc.yml
 #execute the playbook
 ansible-playbook <filename.yml>
 
+#install httpd
+sudo dnf install httpd -y
+#copy public ip address and paste on new tab
+cd /var/www/html
+vim html.index
+<h1> this is my web application </h1>
